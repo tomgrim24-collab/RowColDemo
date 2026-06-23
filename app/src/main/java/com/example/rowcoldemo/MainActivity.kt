@@ -23,13 +23,10 @@ import androidx.compose.foundation.text.KeyboardOptions
 
 @Composable
 fun TipCalcScreen(modifier: Modifier = Modifier) {
-    // Состояния для ввода данных
     var orderAmount by remember { mutableStateOf("") }
     var dishCount by remember { mutableStateOf("") }
     var tipPercentage by remember { mutableStateOf(15f) }
-    var selectedDiscount by remember { mutableStateOf(3) } // 3% по умолчанию
 
-    // Рассчёт скидки в зависимости от количества блюд
     val discount = when {
         dishCount.isEmpty() -> 0
         dishCount.toIntOrNull() == null -> 0
@@ -46,6 +43,31 @@ fun TipCalcScreen(modifier: Modifier = Modifier) {
             .padding(24.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        // Здесь будут UI-элементы
+        // Заголовок
+        Text(
+            text = "Калькулятор чаевых и скидок",
+            fontSize = 24.sp,
+            style = MaterialTheme.typography.titleLarge
+        )
+
+        // Поле для ввода суммы заказа
+        OutlinedTextField(
+            value = orderAmount,
+            onValueChange = { orderAmount = it },
+            label = { Text("Сумма заказа (₽)") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true
+        )
+
+        // Поле для ввода количества блюд
+        OutlinedTextField(
+            value = dishCount,
+            onValueChange = { dishCount = it },
+            label = { Text("Количество блюд") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true
+        )
     }
 }
