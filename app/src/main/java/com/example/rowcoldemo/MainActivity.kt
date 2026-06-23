@@ -6,10 +6,15 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -20,8 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.size
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,7 +50,7 @@ fun RowColDemoScreen(modifier: Modifier = Modifier) {
     ) {
         // 1. Простой Column
         Text(
-            text = "Column (вертикальное расположение):",
+            text = "Column:",
             fontSize = 16.sp,
             modifier = Modifier.padding(4.dp)
         )
@@ -64,7 +68,7 @@ fun RowColDemoScreen(modifier: Modifier = Modifier) {
 
         // 2. Простой Row
         Text(
-            text = "Row (горизонтальное расположение):",
+            text = "Row:",
             fontSize = 16.sp,
             modifier = Modifier.padding(4.dp)
         )
@@ -97,5 +101,103 @@ fun RowColDemoScreen(modifier: Modifier = Modifier) {
             Box(modifier = Modifier.size(40.dp).background(Color.Green))
             Box(modifier = Modifier.size(40.dp).background(Color.Blue))
         }
+
+        // 4. Вложенные Row и Column
+        Text(
+            text = "Вложенные Row + Column:",
+            fontSize = 16.sp,
+            modifier = Modifier.padding(4.dp)
+        )
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.Yellow)
+                .padding(8.dp)
+        ) {
+            Row(
+                horizontalArrangement = Arrangement.SpaceAround,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("1", modifier = Modifier.padding(8.dp).background(Color.Cyan))
+                Text("2", modifier = Modifier.padding(8.dp).background(Color.Cyan))
+                Text("3", modifier = Modifier.padding(8.dp).background(Color.Cyan))
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+            Row(
+                horizontalArrangement = Arrangement.SpaceAround,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("4", modifier = Modifier.padding(8.dp).background(Color.Magenta))
+                Text("5", modifier = Modifier.padding(8.dp).background(Color.Magenta))
+                Text("6", modifier = Modifier.padding(8.dp).background(Color.Magenta))
+            }
+        }
+
+        // 5. Выравнивание в Column
+        Text(
+            text = "Выравнивание в Column:",
+            fontSize = 16.sp,
+            modifier = Modifier.padding(4.dp)
+        )
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(150.dp)
+                .background(Color.LightCoral)
+                .padding(8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.SpaceEvenly
+        ) {
+            Text("Верх", modifier = Modifier.background(Color.White).padding(4.dp))
+            Text("Центр", modifier = Modifier.background(Color.White).padding(4.dp))
+            Text("Низ", modifier = Modifier.background(Color.White).padding(4.dp))
+        }
+
+        // 6. Кнопки в Row
+        Text(
+            text = "Кнопки в Row:",
+            fontSize = 16.sp,
+            modifier = Modifier.padding(4.dp)
+        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(80.dp, 40.dp)
+                    .background(Color(0xFF6200EE))
+                    .padding(8.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text("Кнопка 1", color = Color.White)
+            }
+            Box(
+                modifier = Modifier
+                    .size(80.dp, 40.dp)
+                    .background(Color(0xFF03DAC5))
+                    .padding(8.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text("Кнопка 2")
+            }
+            Box(
+                modifier = Modifier
+                    .size(80.dp, 40.dp)
+                    .background(Color(0xFFFF5722))
+                    .padding(8.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text("Кнопка 3", color = Color.White)
+            }
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun RowColDemoPreview() {
+    MaterialTheme {
+        RowColDemoScreen()
     }
 }
