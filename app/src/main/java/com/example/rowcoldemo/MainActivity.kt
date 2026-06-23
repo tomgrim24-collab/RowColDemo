@@ -69,5 +69,16 @@ fun TipCalcScreen(modifier: Modifier = Modifier) {
             modifier = Modifier.fillMaxWidth(),
             singleLine = true
         )
+        Text(
+            text = "Чаевые: ${tipPercentage.toInt()}%",
+            fontSize = 18.sp
+        )
+        Slider(
+            value = tipPercentage,
+            onValueChange = { tipPercentage = it },
+            valueRange = 0f..25f,
+            steps = 25,
+            modifier = Modifier.fillMaxWidth()
+        )
     }
 }
