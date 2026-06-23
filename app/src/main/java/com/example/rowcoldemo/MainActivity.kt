@@ -20,7 +20,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.size
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,6 +78,24 @@ fun RowColDemoScreen(modifier: Modifier = Modifier) {
             Text("A", modifier = Modifier.padding(4.dp))
             Text("B", modifier = Modifier.padding(4.dp))
             Text("C", modifier = Modifier.padding(4.dp))
+        }
+
+        // 3. Row с SpaceBetween
+        Text(
+            text = "Row с SpaceBetween:",
+            fontSize = 16.sp,
+            modifier = Modifier.padding(4.dp)
+        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.LightGreen)
+                .padding(8.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Box(modifier = Modifier.size(40.dp).background(Color.Red))
+            Box(modifier = Modifier.size(40.dp).background(Color.Green))
+            Box(modifier = Modifier.size(40.dp).background(Color.Blue))
         }
     }
 }
