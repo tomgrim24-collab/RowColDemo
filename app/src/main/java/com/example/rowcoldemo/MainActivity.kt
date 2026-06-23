@@ -80,5 +80,41 @@ fun TipCalcScreen(modifier: Modifier = Modifier) {
             steps = 25,
             modifier = Modifier.fillMaxWidth()
         )
+        Text(
+            text = "Скидка: $discount%",
+            fontSize = 18.sp
+        )
+        Text(
+            text = "Количество блюд: ${if (dishCount.isEmpty()) "0" else dishCount}",
+            fontSize = 14.sp,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+
+// Группа радиокнопок (неактивная для пользователя)
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            TipRadioButton(
+                label = "1-2 блюда (3%)",
+                selected = discount == 3,
+                enabled = false
+            )
+            TipRadioButton(
+                label = "3-5 блюд (5%)",
+                selected = discount == 5,
+                enabled = false
+            )
+            TipRadioButton(
+                label = "6-10 блюд (7%)",
+                selected = discount == 7,
+                enabled = false
+            )
+            TipRadioButton(
+                label = "Более 10 блюд (10%)",
+                selected = discount == 10,
+                enabled = false
+            )
+        }
     }
 }
