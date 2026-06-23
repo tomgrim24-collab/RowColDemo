@@ -13,30 +13,39 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-
-class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            MaterialTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    TipCalcScreen(modifier = Modifier.padding(innerPadding))
-                }
-            }
-        }
-    }
-}
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.foundation.text.KeyboardOptions
 
 @Composable
 fun TipCalcScreen(modifier: Modifier = Modifier) {
-    // Здесь будем добавлять элементы
-}
+    // Состояния для ввода данных
+    var orderAmount by remember { mutableStateOf("") }
+    var dishCount by remember { mutableStateOf("") }
+    var tipPercentage by remember { mutableStateOf(15f) }
+    var selectedDiscount by remember { mutableStateOf(3) } // 3% по умолчанию
 
-@Preview(showBackground = true)
-@Composable
-fun TipCalcPreview() {
-    MaterialTheme {
-        TipCalcScreen()
+    // Рассчёт скидки в зависимости от количества блюд
+    val discount = when {
+        dishCount.isEmpty() -> 0
+        dishCount.toIntOrNull() == null -> 0
+        dishCount.toInt() in 1..2 -> 3
+        dishCount.toInt() in 3..5 -> 5
+        dishCount.toInt() in 6..10 -> 7
+        dishCount.toInt() > 10 -> 10
+        else -> 0
+    }
+
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(24.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        // Здесь будут UI-элементы
     }
 }
