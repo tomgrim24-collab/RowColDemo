@@ -4,22 +4,30 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContent {
+            MaterialTheme {
+                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                    TipCalcScreen(modifier = Modifier.padding(innerPadding))
+                }
+            }
+        }
+    }
+}
 
 @Composable
 fun TipCalcScreen(modifier: Modifier = Modifier) {
@@ -27,21 +35,27 @@ fun TipCalcScreen(modifier: Modifier = Modifier) {
     var dishCount by remember { mutableStateOf("") }
     var tipPercentage by remember { mutableStateOf(15f) }
 
+    val amount = orderAmount.toDoubleOrNull() ?: 0.0
+    val count = dishCount.toIntOrNull() ?: 0
+
     val discount = when {
-        dishCount.isEmpty() -> 0
-        dishCount.toIntOrNull() == null -> 0
-        dishCount.toInt() in 1..2 -> 3
-        dishCount.toInt() in 3..5 -> 5
-        dishCount.toInt() in 6..10 -> 7
-        dishCount.toInt() > 10 -> 10
+        count in 1..2 -> 3
+        count in 3..5 -> 5
+        count in 6..10 -> 7
+        count > 10 -> 10
         else -> 0
     }
+
+    val discountAmount = amount * discount / 100
+    val discountedAmount = amount - discountAmount
+    val tipAmount = discountedAmount * tipPercentage / 100
+    val totalAmount = discountedAmount + tipAmount
 
     Column(
         modifier = modifier
             .fillMaxSize()
             .padding(24.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         // Заголовок
         Text(
@@ -69,6 +83,8 @@ fun TipCalcScreen(modifier: Modifier = Modifier) {
             modifier = Modifier.fillMaxWidth(),
             singleLine = true
         )
+
+        // Слайдер для чаевых
         Text(
             text = "Чаевые: ${tipPercentage.toInt()}%",
             fontSize = 18.sp
@@ -80,17 +96,18 @@ fun TipCalcScreen(modifier: Modifier = Modifier) {
             steps = 25,
             modifier = Modifier.fillMaxWidth()
         )
+
+        // Радиокнопки для скидки
         Text(
             text = "Скидка: $discount%",
             fontSize = 18.sp
         )
         Text(
-            text = "Количество блюд: ${if (dishCount.isEmpty()) "0" else dishCount}",
+            text = "Количество блюд: $count",
             fontSize = 14.sp,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
-// Группа радиокнопок (неактивная для пользователя)
         Column(
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -116,5 +133,67 @@ fun TipCalcScreen(modifier: Modifier = Modifier) {
                 enabled = false
             )
         }
+
+        // Результаты
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.primaryContainer
+            )
+        ) {
+            Column(
+                modifier = Modifier.padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Text(
+                    text = "Итоговый расчёт:",
+                    fontSize = 18.sp,
+                    style = MaterialTheme.typography.titleMedium
+                )
+                Text("Сумма заказа: ${String.format("%.2f", amount)} ₽")
+                Text("Скидка ($discount%): -${String.format("%.2f", discountAmount)} ₽")
+                Text("Сумма со скидкой: ${String.format("%.2f", discountedAmount)} ₽")
+                Text("Чаевые (${tipPercentage.toInt()}%): ${String.format("%.2f", tipAmount)} ₽")
+                Divider()
+                Text(
+                    text = "Итого: ${String.format("%.2f", totalAmount)} ₽",
+                    fontSize = 20.sp,
+                    style = MaterialTheme.typography.titleLarge
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun TipRadioButton(
+    label: String,
+    selected: Boolean,
+    enabled: Boolean = true,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        RadioButton(
+            selected = selected,
+            onClick = null, // Неактивная кнопка
+            enabled = enabled
+        )
+        Text(
+            text = label,
+            modifier = Modifier.padding(start = 8.dp),
+            color = if (enabled) MaterialTheme.colorScheme.onSurface
+            else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun TipCalcPreview() {
+    MaterialTheme {
+        TipCalcScreen()
     }
 }
